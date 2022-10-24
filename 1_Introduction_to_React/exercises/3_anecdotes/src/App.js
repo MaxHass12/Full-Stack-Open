@@ -28,6 +28,7 @@ const App = () => {
   }
 
   const getMostPopularAnecdote = () => {
+    if (votes.every(vote => vote === 0)) return;
     const maxVotes = Math.max(...votes);
     const maxVotesAnecdotesIndex =  votes.indexOf(maxVotes);
     return ANECDOTES[maxVotesAnecdotesIndex];
