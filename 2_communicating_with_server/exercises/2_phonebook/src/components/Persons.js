@@ -1,8 +1,13 @@
-const DisplaySingleContact = ({ person }) => {
-  return <p>{person.name} {person.number}</p>
+const DisplaySingleContact = ({ person, deleteContact }) => {
+  return (
+          <p>
+            {person.name} {person.number}
+            <button onClick={() => {deleteContact(person.name)}}>delete</button>
+          </p>
+         )
 }
 
-const Persons = ({ persons, searchText} ) => {
+const Persons = ({ persons, searchText, deleteContact} ) => {
   if (searchText.trim() !== '') {
     searchText = searchText.trim().toLowerCase();
     console.log(searchText);
@@ -13,7 +18,7 @@ const Persons = ({ persons, searchText} ) => {
     <>
       {
         persons.map(person => {
-          return <DisplaySingleContact key={person.name} person={person}/>;
+          return <DisplaySingleContact key={person.name} person={person} deleteContact={deleteContact}/>;
         })
       }
     </>
