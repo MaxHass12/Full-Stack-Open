@@ -1,9 +1,10 @@
 const { request, response } = require('express');
 const express = require('express');
+const cors = require('cors');
+
 const app = express();
 
-
-const PORT = 3001;
+const PORT = process.env.port || 3001;
 let notes = [
   {
     id: 1,
@@ -44,8 +45,10 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint'});
 }
 
+// MIDDLEWARE
 app.use(express.json());
 app.use(requestLogger);
+app.use(cors());
 
 // ROUTES
 
