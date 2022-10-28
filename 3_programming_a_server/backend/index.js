@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const app = express();
 
-const PORT = process.env.port || 3001;
+const PORT = process.env.port || 8080;
 let notes = [
   {
     id: 1,
