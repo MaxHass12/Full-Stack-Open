@@ -2,6 +2,7 @@ import Persons from './components/Persons';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import phoneServices from './services/phone';
+import Notification from './components/Notification';
 
 import { useState, useEffect } from 'react';
 
@@ -10,6 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [searchText, setSearchText] = useState('');
+  const [notificationMsg, setNotificationMsg] = useState(null);
+  const [isSuccess, setIsSuccess] = useState(true);
 
   const effect = () => {
     phoneServices
@@ -21,12 +24,19 @@ const App = () => {
 
   useEffect(effect, []);
 
+  const displayNotification = (message, isSuccess) => {
+    setNotificationMsg(message);
+    setIsSuccess(isSuccess);
+    setTimeout(() => {setNotificationMsg(null)}, 5000);
+  }
+
   const updateContact = () => {
     const person = persons.find(p => p.name = newName);
     const id = person.id;
     phoneServices
       .update(id, newName, newNumber)
       .then((response) => {
+        displayNotification(`${newName} is updated.`, true);
         const remainingPerson = persons.filter(p => p.name !== newName);
         setPersons(remainingPerson.concat(response));
         setNewName('');
@@ -50,9 +60,10 @@ const App = () => {
       phoneServices
       .create(newPerson)
       .then(data => {
-      setPersons(persons.concat(data));
-      setNewName('');
-      setNewNumber('');
+        displayNotification(`${newName} is added.`, true);
+        setPersons(persons.concat(data));
+        setNewName('');
+        setNewNumber('');
       });
     }
   }
@@ -79,8 +90,13 @@ const App = () => {
       phoneServices
         .deleteRequest(id)
         .then(() => {
+          displayNotification(`${name} is deleted`, true);
           const newPersons = persons.filter(p => p.id !== id);
           setPersons(newPersons);
+        })
+        .catch(error => {
+          displayNotification(`${name} does not exist`, false);
+          setPersons(persons.filter(p => p.name !== name));
         });
     }
   } 
@@ -88,6 +104,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMsg} isSuccess={isSuccess}/>
       <Filter searchText={searchText} handler={handleSearchTextChange}/>
       <h3>add a new</h3>
       <PersonForm newName={newName} handleInputChange={handleInputChange}
