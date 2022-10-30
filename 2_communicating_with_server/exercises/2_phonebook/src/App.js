@@ -31,13 +31,13 @@ const App = () => {
   }
 
   const updateContact = () => {
-    const person = persons.find(p => p.name = newName);
+    const person = persons.find(p => p.name === newName);
     const id = person.id;
     phoneServices
       .update(id, newName, newNumber)
-      .then((response) => {
+      .then(response => {
         displayNotification(`${newName} is updated.`, true);
-        const remainingPerson = persons.filter(p => p.name !== newName);
+        const remainingPerson = persons.filter(p => p.id !== response.id);
         setPersons(remainingPerson.concat(response));
         setNewName('');
         setNewNumber('');
@@ -55,7 +55,7 @@ const App = () => {
       }
     } else {
       const newPerson = {name: newName,
-        number: newNumber};
+                        number: newNumber};
 
       phoneServices
       .create(newPerson)
@@ -64,6 +64,9 @@ const App = () => {
         setPersons(persons.concat(data));
         setNewName('');
         setNewNumber('');
+      })
+      .catch(error => {
+        displayNotification(error.response.data, false);
       });
     }
   }

@@ -50,3 +50,69 @@
 - middleware takes 3 arguments, request, response and next. The next function yields control to the next middleware.
 - middleware functions have to be taken into use before routes if we want them to be executed before the route handlers are called.
 - we can also define middleware after the routes, ie they are called only if no route handles the HTTP request.
+
+# B - DEPLOYING APP TO INTERNET
+
+- Cross-Origin Resource Sharing (CORS) allows only restricted resources from another domain outside the domain from which the resource was served. 2 URLs have same origin if protocol, host and port are same.
+
+- We deployed the backend using fly
+
+- In the dev mode, the react application is configured to give clear error messages, immediately render code changes to browser, etc. For production, we need to create a production build.
+
+- `npm run build` builds a production build.
+
+- This creates the build directory which stores all the static files of our application. We will end up with 1 html file and 1 JS file (compiled from a combination of all source files and dependencies).
+
+- One option is to copy the build directory to the root of the backend and serve the HTML as the home route from the application.
+
+- To make express show static content, we need a built-in middleware from express called static.
+
+- To make the data permanent, we need a database. Else everytime we restart the app or the app crashes, the database will be reloaded.
+
+# C - Saving data to MongoDB
+
+- MongoDB is a document database. In RDB, data is stored in separate tables and information related to a single object is spreaded across tables.
+
+- MongoDB stores data as documents (BSON document ie Binary version of JSON) which are gathered together in collections. A database stores 1 or more collections. A collection is analogous to table in RDB.
+
+- We will use internet based MongoDB provider MongoDB Atlas.
+
+- After the cloud database setup, we will use `mongoose` library. Mongoose can be described as Object Document Mapper (ODM) - saving JS objects as Mongo Documents is relatively straightforward with this library.
+
+- Everything in mongoose starts with a Schema. Each Schema maps to a MongoDB collection and defines the shape of the document within that collection. Defined by `new Mongoose.Schema`
+
+- Then, Models are made from Schema. Model are fancy constructor compiled from Schema. An instance of a Model is called a Document. Responsible for creating documents. Models are created by `mongoose.model`. Models are constructor functions which create new JS objects based on the params. Since the objects are created with model's constructor function - they have all the properties of the model.
+
+- Document Databases are schema-less, it is possible to store documents with completely different fields in the same collection. The idea is that the schema is defined at the level of the application. Saving the object to DB happens with `save` method.
+
+- If the `mongoose.connection().close()` closes the collection - if the connection is not closed, the program will never finish its execution.
+
+- The frontend assumes that every object has a unique id in the id field. The id in MongoDB only looks like a string, however its an object. Also we dont want `_v` in our objects. The only way to format the objects returned by mongoose is to modify the `toJSON` method of the schema - which is used on all instances of the models produced with that schema.
+
+- `notes` variable refers an array of objects (models) returned by Mongo. When the response is send in json format, the `toJSON` method of each object in array is called automatically.
+
+- Exporting modules in node is a bit different. Public interface is defined by setting a value to `module.exports` variable. We will set it to be `Note` model. Other things inside the module will not be visible from outside.
+
+- FIRST TEST THE BACKGROUND IN ISOLATION. TESTING BACKEND THROUGH FRONTEND IS VERY INEFFICIENT.
+
+- Its commong to have all error handling at a single place. We often want to implement all error handling in a single place. `next` function is passed to the route handler as a third parameter.
+
+- If the `next` is called without arguments, then the execution moves to next middlware or route. If `next` is called with arguments then the execution moves to error-handler middleware.
+
+- Express error-handlers are middleware that are defined with a functions that accept 4 parameters.
+
+- The execution order of middleware is same as that in which they are loaded in the express `app.use` function. The json-parser should be among the very first middlware loaded into Express, else `request.body` will be `undefined` for future routes. Middleware for handling unsupported routes is the second-last just before the error-handler. That would nullify all future routes.
+
+# D - VALIDATION AND ESLINT
+
+- Till now we are validating the input in the route handler. One smarter way of validating the format of data before its stored in DB is to use the validation functionality in Mongoose.
+
+- `minLength`, `required` validators are built-in and provided by Mongoose. We can create custom validators if the built-in validators do not fulfill our need.
+
+- Validations are not done when updating the entries. Need to do it manually.
+
+## LINT
+
+- Linter is a tool which detects and flags errors in programming languages, including stylistic errors. Generally perform static analysis of source code.
+
+-

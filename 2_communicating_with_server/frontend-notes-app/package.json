@@ -1,5 +1,5 @@
 {
-  "name": "2_phonebook",
+  "name": "tmp",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -18,9 +18,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "json-server -p3001 --watch db.json",
-    "update-backend": "cp -r build ../../../../phonebook-backend/"
+    "update-backend": "cp -r build ../../3_programming_a_server/notes-backend/"
   },
-  "proxy": "http://localhost:3001",
+  "proxy": "http://localhost:8080",
   "eslintConfig": {
     "extends": [
       "react-app",
