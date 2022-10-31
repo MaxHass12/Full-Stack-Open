@@ -31,11 +31,10 @@ const errorHandler = (error, request, response, next) => {
 }
 
 // MIDDLEWARE
-app.use(express.static('build'));
 app.use(express.json());
 app.use(requestLogger);
 app.use(cors());
-
+app.use(express.static('build'));
 
 // ROUTES
 
