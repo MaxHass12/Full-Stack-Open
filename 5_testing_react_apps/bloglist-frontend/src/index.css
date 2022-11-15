@@ -1,0 +1,6 @@
+.message {
+  border: solid 1px black;
+  padding: 10px;
+  margin: 5px;
+  background-color: lightgrey;
+}

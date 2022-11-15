@@ -1,0 +1,17 @@
+POST http://localhost:8080/api/notes 
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2MzYyZGJlMzllNDI4NmYyNDA5OWViYTkiLCJpYXQiOjE2NjgzODIyMzcsImV4cCI6MTY2ODM4NTgzN30.fE-3FxUkpar63EVRKgPfBwyhTWkzNKfuJgymoDb064o
+
+{
+  "content": "test note with authorization",
+  "important": true,
+  "userId": "6362dbe39e4286f24099eba9"
+}
+
+###
+POST http://localhost:8080/api/notes 
+Content-Type: application/json
+
+{
+  "important": true
+}

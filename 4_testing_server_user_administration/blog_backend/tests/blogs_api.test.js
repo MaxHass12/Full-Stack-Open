@@ -40,23 +40,25 @@ describe('when 2 blogs are present', () => {
 });
 
 describe('create new blog', () => {
+  let token;
   beforeEach(async () => {
     await User.deleteMany({});
 
     const passwordHash = await bcrypt.hash('password', 10);
-    const user = new User({ username: 'admin', passwordHash });
+    const user = new User({ username: 'admin', name: 'admin', passwordHash });
     await user.save();
-  });
 
-  test('create new blog with valid data', async () => {
     const loginResponse = await api
       .post('/api/login')
       .send({ username: 'admin', password: 'password' })
       .expect(200);
 
+    token = loginResponse.body.token
+  });
+
+  test('create new blog with valid data', async () => {
     const usersAtStart = await helper.getAllUsers();
     const userAtStart = usersAtStart[0];
-    const authorization = loginResponse.body.token;
 
     const newBlog = helper.INITIAL_BLOGS[2];
     const newBlogData = {
@@ -71,10 +73,10 @@ describe('create new blog', () => {
     expect(blogsBeforePostRequest).toHaveLength(2);
     expect(userAtStart.blogs).toHaveLength(0);
 
-    const response = await api
+    await api
       .post('/api/blogs')
       .send(newBlogData)
-      .set('Authorization', `Bearer ${authorization}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
@@ -99,7 +101,7 @@ describe('create new blog', () => {
       userId: userAtStart.id,
     };
 
-    const response = await api
+    await api
       .post('/api/blogs')
       .send(newBlogData)
       .set('Authorization', 'abc')
@@ -107,37 +109,72 @@ describe('create new blog', () => {
   });
 
   test('likes default to zero if not provided', async () => {
-    const newBlogData = { title: 'foo', author: 'bar' };
+    const usersAtStart = await helper.getAllUsers();
+    const userAtStart = usersAtStart[0];
+
+    const newBlog = helper.INITIAL_BLOGS[2];
+    const newBlogData = {
+      title: newBlog.title,
+      author: newBlog.author,
+      url: newBlog.url,
+      userId: userAtStart.id,
+    };
 
     const result = await api
       .post('/api/blogs')
-      .send(newBlogData);
-    const newBlog = result.body;
-    expect(newBlog.likes).toBe(0);
+      .send(newBlogData)
+      .set('Authorization', `Bearer ${token}`);
+
+    const returnedBlog = result.body;
+    expect(returnedBlog.likes).toBe(0);
   });
 
   test('title should not be missing', async () => {
-    const newBlogData = { url: 'foo' };
-    const startAllBlogs = await helper.getAllBlogs();
+    const usersAtStart = await helper.getAllUsers();
+    const userAtStart = usersAtStart[0];
+
+    const newBlog = helper.INITIAL_BLOGS[2];
+    const newBlogData = {
+      author: newBlog.author,
+      url: newBlog.url,
+      likes: newBlog.likes,
+      userId: userAtStart.id,
+    };
+
+    const blogsBeforePostRequest = await helper.getAllBlogs();
 
     await api
       .post('/api/blogs')
       .send(newBlogData)
+      .set('Authorization', `Bearer ${token}`)
       .expect(400);
+
     const endAllBlogs = await helper.getAllBlogs();
-    expect(endAllBlogs).toHaveLength(startAllBlogs.length);
+    expect(endAllBlogs).toHaveLength(blogsBeforePostRequest.length);
   });
 
-  test('url should not be missing', async () => {
-    const newBlogData = { title: 'foo' };
-    const startAllBlogs = await helper.getAllBlogs();
+  test('url can be missing', async () => {
+    const usersAtStart = await helper.getAllUsers();
+    const userAtStart = usersAtStart[0];
+
+    const newBlog = helper.INITIAL_BLOGS[2];
+    const newBlogData = {
+      title: newBlog.title,
+      author: newBlog.author,
+      likes: newBlog.likes,
+      userId: userAtStart.id,
+    };
+
+    const blogsBeforePostRequest = await helper.getAllBlogs();
 
     await api
       .post('/api/blogs')
       .send(newBlogData)
-      .expect(400);
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201);
+
     const endAllBlogs = await helper.getAllBlogs();
-    expect(endAllBlogs).toHaveLength(startAllBlogs.length);
+    expect(endAllBlogs).toHaveLength(blogsBeforePostRequest.length + 1);
   });
 });
 

@@ -1,13 +1,4 @@
-const foo = () => {
-  console.log(this);
-}
+const x = {foo: true ? 'x' : 'y'}
 
-// function foo() {
-//   console.log(this);
-// }
-
-const obj = {a: 1};
-
-obj.f = foo;
-obj.f();
+console.log(x);
 

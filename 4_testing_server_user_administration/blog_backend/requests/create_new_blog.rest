@@ -1,10 +1,10 @@
 POST http://localhost:8080/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2MzY0MTdlOGYxZDk3YTRkZWFkZjlhNzQiLCJpYXQiOjE2Njc1MTA3NTB9.-nBZu82jrS3KCMEYlkCTDwUV_DgxvWmh2tvW6Qk8rKA
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2MzY0MTdlOGYxZDk3YTRkZWFkZjlhNzQiLCJpYXQiOjE2Njg0NjMzMzYsImV4cCI6MTY2ODQ2NjkzNn0.yWNdVwU_2LjgNjy2AmqdhSuF6s_rnx6LQHuRyWE_YXQ
 
 {
   "title": "third blog with authorization",
   "author": "marting fowler",
-  "userId": "636417e8f1d97a4deadf9a74",
+  "userId": "36417e8f1d97a4deadf9a74",
   "url": "url"
 }

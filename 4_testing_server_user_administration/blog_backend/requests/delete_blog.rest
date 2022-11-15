@@ -1,6 +1,6 @@
-DELETE http://localhost:8080/api/blogs/63644a24f50114a61bd88d68
+DELETE http://localhost:8080/api/blogs/6372e8c676f5d0730b94fcaa
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2MzY0MTdlOGYxZDk3YTRkZWFkZjlhNzQiLCJpYXQiOjE2Njc1MTY2OTEsImV4cCI6MTY2NzUyMDI5MX0.nGJQf-cyN3ql4Vjlq9M_f4B5Ot0In6XAPmDPinOW1vE
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2MzY0MTdlOGYxZDk3YTRkZWFkZjlhNzQiLCJpYXQiOjE2Njg0NzQ4NDEsImV4cCI6MTY2ODQ3ODQ0MX0.9A1RHAXG8kHA4HLW_SpUN3KBk-AmlqND3aQJXj1yDNg
 
 ###
 POST http://localhost:8080/api/blogs
